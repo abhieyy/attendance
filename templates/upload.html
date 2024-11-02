@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Biometric Registration System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00f7ff;
+            --secondary-color: #0a192f;
+            --accent-color: #64ffda;
+            --text-color: #e6f1ff;
+            --dark-bg: #020c1b;
+            --card-bg: rgba(2, 12, 27, 0.7);
+            --glow-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 247, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 20%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: var(--glow-shadow);
+        }
+
+        .header p {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+
+        .upload-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(2, 12, 27, 0.5);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        }
+
+        .camera-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--primary-color);
+            box-shadow: var(--glow-shadow);
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .captured-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(2, 12, 27, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+        }
+
+        .captured-image-container {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .captured-image-container:hover {
+            transform: scale(1.05);
+        }
+
+        .captured-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--accent-color);
+        }
+
+        .delete-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .delete-image:hover {
+            background: rgba(255, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .primary-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: var(--secondary-color);
+            font-weight: bold;
+            box-shadow: var(--glow-shadow);
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.7);
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .secondary-button:hover {
+            background: rgba(0, 247, 255, 0.1);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .error-message {
+            color: #ff4757;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Scanner effect */
+        .video-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-color);
+            animation: scan 2s linear infinite;
+            box-shadow: 0 0 15px var(--primary-color);
+            opacity: 0.7;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        /* Glowing dots animation */
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                width: 100%;
+                height: 360px;
+            }
+
+            .captured-images {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 12, 27, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Biometric Identity Registration</h2>
+            <p>Advanced Neural Network Face Recognition System</p>
+        </div>
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
+            <div class="upload-section">
+                <div class="input-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="input-group">
+                    <label>Upload Existing Photos</label>
+                    <input type="file" id="files" name="files" multiple accept="image/*" style="display: none;">
+                    <button type="button" class="button secondary-button" onclick="document.getElementById('files').click()">
+                        <i class="fas fa-upload"></i> Choose Files
+                    </button>
+                    <div id="fileList" style="margin-top: 0.5rem;"></div>
+                </div>
+
+                <div class="camera-section">
+                    <h3>Capture Photos</h3>
+                    <div class="video-container">
+                        <video id="video" autoplay playsinline></video>
+                    </div>
+                    <div id="errorMessage" class="error-message"></div>
+                    
+                    <div class="button-group">
+                        <button type="button" class="button primary-button" id="startCamera">
+                            <i class="fas fa-camera"></i> Start Camera
+                        </button>
+                        <button type="button" class="button secondary-button" id="capture" style="display: none;">
+                            <i class="fas fa-camera-retro"></i> Capture Photo
+                        </button>
+                    </div>
+
+                    <div class="captured-images" id="capturedImages"></div>
+                </div>
+
+                <div class="button-group" style="justify-content: center;">
+                    <button type="submit" class="button primary-button">
+                        <i class="fas fa-save"></i> Save Registration
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        let video = document.getElementById('video');
+        let captureButton = document.getElementById('capture');
+        let startButton = document.getElementById('startCamera');
+        let stream = null;
+        let capturedPhotos = [];
+
+        // Start camera
+        startButton.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: "user"
+                    } 
+                });
+                video.srcObject = stream;
+                startButton.style.display = 'none';
+                captureButton.style.display = 'inline-flex';
+                document.getElementById('errorMessage').textContent = '';
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                let errorMsg = "Error accessing camera. ";
+                if (err.name === 'NotAllowedError') {
+                    errorMsg += "Please allow camera access in your browser settings.";
+                } else if (err.name === 'NotFoundError') {
+                    errorMsg += "No camera device found.";
+                } else {
+                    errorMsg += "Please make sure you have granted camera permissions.";
+                }
+                document.getElementById('errorMessage').textContent = errorMsg;
+            }
+        });
+
+        // Capture photo
+        captureButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            const imageData = canvas.toDataURL('image/jpeg');
+            addCapturedImage(imageData);
+        });
+
+        function addCapturedImage(imageData) {
+            const container = document.createElement('div');
+            container.className = 'captured-image-container';
+
+            const img = document.createElement('img');
+            img.src = imageData;
+            img.className = 'captured-image';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-image';
+            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+            deleteBtn.onclick = () => {
+                container.remove();
+                capturedPhotos = capturedPhotos.filter(photo => photo !== imageData);
+            };
+
+            container.appendChild(img);
+            container.appendChild(deleteBtn);
+            document.getElementById('capturedImages').appendChild(container);
+            capturedPhotos.push(imageData);
+        }
+
+        // File input handling
+        document.getElementById('files').addEventListener('change', function(e) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            for (let file of this.files) {
+                fileList.innerHTML += `<div>${file.name}</div>`;
+            }
+        });
+
+        // Form submission
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show loading indicator
+            document.getElementById('loading').style.display = 'flex';
+            
+            const formData = new FormData(e.target);
+            capturedPhotos.forEach((photo, index) => {
+                formData.append('captured_images[]', photo);
+            });
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.text();
+                
+                if (response.ok) {
+                    alert('Biometric registration successful!');
+                    e.target.reset();
+                    document.getElementById('capturedImages').innerHTML = '';
+                    capturedPhotos = [];
+                    document.getElementById('fileList').innerHTML = '';
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                        video.srcObject = null;
+                    }
+                    startButton.style.display = 'inline-flex';
+                    captureButton.style.display = 'none';
+                } else {
+                    alert('Error: ' + result);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error uploading biometric data. Please try again.');
+            } finally {
+                // Hide loading indicator
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+
+        // Clean up resources when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
